@@ -1,0 +1,23 @@
+.carousel-item {
+    height: 15rem;
+    bottom: 20px;
+}
+
+.main {
+    flex-grow: 1;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
