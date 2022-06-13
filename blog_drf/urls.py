@@ -28,10 +28,10 @@ urlpatterns = [
 
     #Blog
     path('', views.home, name='home'),
-    path('post/', views.post, name='post'),
+    path('post/<int:post_id>/', views.post, name='post'),
     path('contact/', views.contact, name='contact'),
     path('thanks/', views.thanks, name='thanks'),
     path('search', views.search, name='search'),
     path("ckeditor/", include('ckeditor_uploader.urls')),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

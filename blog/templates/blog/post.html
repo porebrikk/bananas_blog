@@ -2,18 +2,16 @@
 {% load static %}
 
 {% block title %}
-Post
+{{ post.title }}
 {% endblock %}
 
 {% block content %}
 
 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{% static 'blog/carousel_1.jpg' %}" class="d-block w-100" alt="Слайд">
+      <div class="carousel-item active w-100 bg-dark">
         <div class="carousel-caption d-none d-md-block">
-          <h1>Cлайд</h1>
-          <h5>Описание слайда</h5>
+          <h1 class="mb-5">{{ post.title }}</h1>
         </div>
       </div>
     </div>
@@ -26,31 +24,20 @@ Post
             <nav aria-label="breadcrumb" class="mt-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="#">Главная</a>
+                        <a href="/">Главная</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Пост</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
                 </ol>
             </nav>
             <!-- Тело поста -->
-            <img class="img-fluid rounded" src="" alt="">
+            <img class="img-fluid rounded" src="{{ post.image.url }}" alt="">
             <hr>
             <p class="lead">
-                Это основной абзац. Здесь размещен текст. Этот текст несет огромную смысловую нагрузку.
+                {{ post.description|safe }}
             </p>
-            <p>
-                Кто бы мог подумать, да? Вот так бывает. Так иногда случается. Сериал на фоне интересный,
-                но я стараюсь работать. Получается не очень хорошо, но главное - старания. Потому что,
-                как завещали мудрейшие, "Терпение и труд все перетрут". В труху. В порошок. На этом второй
-                абзац заканчивается.
-            </p>
-            <p>
-                Ну и еще один абзац за компанию. Просто до кучи. Пусть будет здесь. Хочется чипсов и колы.
-                А еще можно было бы покушать сладкие карандаши из пирата. Было бы очень здорово.
-                Может сожрать сушеные манго?
-            </p>
-            <p class="lead text-right">Автор: <a href="#">Денис Баринов</a></p>
+            <p class="lead text-right">Автор: {{ post.author }}</p>
             <hr>
-            <div class="text-right">Опубликовано 12.06.2022</div>
+            <div class="text-right">Опубликовано {{ post.created_at }}</div>
             <!-- Контейнер с комментариями -->
             <div class="card my-4">
                 <h5 class="card-header">Прокомментируй:</h5>

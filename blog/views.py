@@ -1,10 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Post
+from django.core.paginator import Paginator
 
 def home(request):
-    return render(request, 'blog/home.html')
+    posts = Post.objects.all()
+    paginator = Paginator(posts, 6)
 
-def post(request):
-    return render(request, 'blog/post.html')
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'blog/home.html', context={
+            'page_obj': page_obj
+        })
+
+def post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    return render(request, 'blog/post.html', context={
+        'post': post
+    })
 
 def contact(request):
     return render(request, 'blog/contact.html')
