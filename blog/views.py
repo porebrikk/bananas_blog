@@ -1,9 +1,31 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from django.core.paginator import Paginator
+from .forms import SignUpForm
+from django.contrib.auth import login
+from django.http import HttpResponseRedirect
+from django.views import View
+
+class SignUpView(View):
+    def get(self, request, *args, **kwargs):
+        form = SignUpForm()
+        return render(request, 'blog/signup.html', context={
+            'form': form
+        })
+
+    def post(self, request, *args, **kwargs):
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/')
+        return render(request, 'blog/signup.html', context={
+            'form': form
+        })
 
 def home(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-created_at')
     paginator = Paginator(posts, 6)
 
     page_number = request.GET.get('page')
@@ -23,9 +45,6 @@ def contact(request):
 
 def thanks(request):
     return render(request, 'blog/thanks.html')
-
-def signup(request):
-    return render(request, 'blog/signup.html')
 
 def signin(request):
     return render(request, 'blog/signin.html')

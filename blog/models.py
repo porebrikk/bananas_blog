@@ -4,7 +4,7 @@ from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
 
 class Post(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
     url = models.URLField(blank=True)
     description = RichTextUploadingField()
     image = models.ImageField(upload_to='blog/images/')

@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #Auth
-    path('signup/', views.signup, name='signup'),
+    path('signup/', views.SignUpView.as_view(), name='signup'),
     path('signin/', views.signin, name='signin'),
 
     #Blog
