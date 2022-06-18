@@ -8,11 +8,10 @@ Search
 {% block content %}
 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{% static 'blog/carousel_2.jpg' %}" class="d-block w-100" alt="Слайд">
+      <div class="carousel-item active bg-dark">
         <div class="carousel-caption d-none d-md-block">
-            <form action="" class="my-2 my-lg-0">
-                <input type="text" class="form-control" placeholder="Поиск" aria-label="Поиск">
+            <form action="{% url 'search' %}" method="GET" class="my-2 my-lg-0">
+                <input name="q" type="text" class="form-control" placeholder="Поиск" aria-label="Поиск">
                 <button class="btn btn-outline-light mt-3" type="submit">Поиск</button>
             </form>
         </div>
@@ -29,30 +28,51 @@ Search
                 </ol>
             </nav>
 
-            <p class="lead">Найдено записей: 3</p>
-            <a href=""><h2>Заголовок поста 1</h2></a>
-            <p>Это красткое описание поста. Это красткое описание поста. Это красткое описание поста.</p>
-            <hr>
-            <a href=""><h2>Заголовок поста 2</h2></a>
-            <p>Это красткое описание поста. Это красткое описание поста. Это красткое описание поста.</p>
-            <hr>
-            <a href=""><h2>Заголовок поста 3</h2></a>
-            <p>Это красткое описание поста. Это красткое описание поста. Это красткое описание поста.</p>
-            <hr>
+            <p class="lead">Найдено записей: {{ count }}</p>
+            {% for result in results %}
+                <a href="{% url 'post' post_id=result.pk %}"><h2>{{ result.title }}</h2></a>
+                <p>{{ result.description|safe }}</p>
+                <hr>
+            {% endfor %}
         </div>
     </div>
 </div>
 <nav aria-label="Paginate me">
     <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Предыдущая</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Следующая</a>
-        </li>
+        {% if results.has_previous %}
+            <a class="page-link" href="?page={{ results.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" tabindex="-1">
+                Предыдущая
+            </a>
+        {% else %}
+            <li class="page-item disabled">
+                 <a class="page-link disabled" href="#" tabindex="-1">Предыдущая</a>
+            </li>
+        {% endif %}
+        {% for i in results.paginator.page_range %}
+            {% if i == results.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                        {{ i }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                        {{ i }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% if result.has_next %}
+            <a class="page-link" href="?page={{ results.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                Следующая
+            </a>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Следующая</a>
+            </li>
+        {% endif %}
     </ul>
 </nav>
+<br>
 {% endblock %}

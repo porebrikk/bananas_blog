@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog',
     'ckeditor',
     'ckeditor_uploader',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -133,11 +134,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-try:
-    from .local_settings import *
-except ImportError:
-    print('Looks like no local file. You must be on production.')
-
     ##  CKEDITOR CONFIGURATION ##
 
 CKEDITOR_JQUERY_URL = "https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -162,3 +158,19 @@ CKEDITOR_CONFIGS = {
     ],
     }
 }
+
+LOGOUT_REDIRECT_URL = "/"
+
+    ###MAIL BLOCK###
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'Your email'
+EMAIL_HOST_PASSWORD = 'Your app_pass'
+
+
+try:
+    from .local_settings import *
+except ImportError:
+    print('Looks like no local file. You must be on production.')

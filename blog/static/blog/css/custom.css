@@ -44,3 +44,15 @@ body {
     display: flex;
     justify-content: start;
 }
+
+.badge {
+    text-decoration: None;
+    color: white;
+    background-color: gray;
+}
+
+.badge:hover,
+.badge:focus,
+.badge:visited{
+    color: white;
+}

@@ -31,17 +31,17 @@
               <a class="nav-link" href="{% url 'contact' %}">Контакты</a>
             </li>
             </ul>
-          <form class="d-flex">
-            <input class="form-control me-2 my-1" type="search" placeholder="Поиск" aria-label="Поиск">
+          <form action="{% url 'search' %}" method="GET" class="d-flex">
+            <input name="q" class="form-control me-2 my-1" type="search" placeholder="Поиск" aria-label="Поиск">
             <button class="btn btn-outline-success my-1" type="submit">Искать</button>
           </form>
-          <li class="nav-item my-1">
-              <a href="{% url 'signin' %}">
-                <button type="button" class="btn btn-outline-light mx-1">Вход</button></a>
-              <a href="{% url 'signup' %}">
-                <button type="button" class="btn btn-outline-light mx-1">Регистрация</button></a>
-              <button type="button" class="btn btn-outline-light mx-1">Выход</button>
-          </li>
+          {% if user.is_authenticated %}
+            <span class="navbar-text mx-2">{{ user }}</span>
+            <a href="{% url 'signout' %}" class="btn btn-outline-light">Выход</a>
+          {% else %}
+            <a href="{% url 'signin' %}" class="btn btn-outline-light mx-2">Вход</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-light">Регистрация</a>
+          {% endif %}
         </div>
       </div>
     </nav>
