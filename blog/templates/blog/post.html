@@ -34,25 +34,35 @@
             <!-- Контейнер с комментариями -->
             <div class="card my-4">
                 <h5 class="card-header">Прокомментируй:</h5>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Отправить</button>
-                    </form>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ comment_form.text}}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <h6 class="card-header">
+                        <a href="{% url 'signin' %}">Авторизуйтесь</a>
+                        или
+                        <a href="{% url 'signup' %}">Зарегистрируйтесь</a>
+                        чтобы оставить комментарий.
+                    </h6>
+                {% endif %}
             </div>
+            {% for comment in post.comments.all %}
             <div class="d-flex media mb-4 p-1">
-                <img class="mr-3 rounded-circle" src="{% static 'blog/face.png' %}"
-                     alt="" width="55wv" height="55hv">
-                <div class="container media-body">
-                    <h5 class="mt-0">Даниил Суперимя</h5>
-                    Я считаю, что у меня лучшее имя в мире. Очень важно писать мое имя
-                    с двумя буквами "и" и одной "л", потому что я - Даниил, а не Данилл или Данила.
-                    Смотрите на меня, я важный.
+                <img class="mx-3 rounded-circle" src="{% static 'blog/avatar.png' %}"
+                     alt="" height="50vh" width="50vw">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ comment.username }}</h5>
+                    {{ comment.text }}
                 </div>
             </div>
+            {% endfor %}
         </div>
 
         <!-- Правая колонка -->

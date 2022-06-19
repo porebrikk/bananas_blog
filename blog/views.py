@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post
+from .models import Post, Comment
 from django.core.paginator import Paginator
-from .forms import SignUpForm, SignInForm, FeedBackForm
+from .forms import SignUpForm, SignInForm, FeedBackForm, CommentForm
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
@@ -112,16 +112,30 @@ def home(request):
             'page_obj': page_obj
         })
 
-def post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    common_tags = Post.tag.most_common()
-    last_posts = Post.objects.all().order_by('-id')[:3]
-    return render(request, 'blog/post.html', context={
-        'post': post,
-        'common_tags': common_tags,
-        'last_posts': last_posts
-    })
+class PostView(View):
+    def get(self, request, post_id, *args, **kwargs):
+        post = get_object_or_404(Post, pk=post_id)
+        common_tags = Post.tag.most_common()
+        last_posts = Post.objects.all().order_by('-id')[:3]
+        comment_form = CommentForm()
+        return render(request, 'blog/post.html', context={
+            'post': post,
+            'common_tags': common_tags,
+            'last_posts': last_posts,
+            'comment_form': comment_form
+        })
 
+    def post(self, request, post_id, *args, **kwargs):
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            text = request.POST['text']
+            username = self.request.user
+            post = get_object_or_404(Post, pk=post_id)
+            comment = Comment.objects.create(post=post, username=username, text=text)
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return render(request, 'blog/post.html', context={
+            'comment_form': comment_form
+        })
 
 def thanks(request):
     return render(request, 'blog/thanks.html')

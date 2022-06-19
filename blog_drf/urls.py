@@ -32,7 +32,7 @@ urlpatterns = [
 
     #Blog
     path('', views.home, name='home'),
-    path('post/<int:post_id>/', views.post, name='post'),
+    path('post/<int:post_id>/', views.PostView.as_view(), name='post'),
     path('contact/', views.FeedBackView.as_view(), name='contact'),
     path('contact/thanks/', views.thanks, name='thanks'),
     path('search', views.SearchView.as_view(), name='search'),
